@@ -37,7 +37,10 @@ module Mattheus
       end
       
       def [](line)
-        lines[line-1]
+        return [nil, nil] if lines[line].nil?
+        m = lines[line][0].match /^(\d+).\s*/
+        return [nil, lines[line]] unless m
+        return [m[1].to_i, lines[line][1..-1]]
       end
       
       def lines
@@ -45,8 +48,8 @@ module Mattheus
       end
       
       def each(&block)
-        i = 1
-        while !self[i].nil?
+        i = 0
+        while !lines[i].nil?
           if block.arity == 2
             yield i, self[i]
           else
